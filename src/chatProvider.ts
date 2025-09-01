@@ -8,13 +8,16 @@ export class ChatProvider implements vscode.WebviewViewProvider {
     constructor(
         private context: vscode.ExtensionContext,
         private genkitService: GenkitService
-    ) {}
+    ) {
+        console.log('ChatProvider: Constructor called');
+    }
 
     public resolveWebviewView(
         webviewView: vscode.WebviewView,
         context: vscode.WebviewViewResolveContext,
         _token: vscode.CancellationToken,
     ) {
+        console.log('ChatProvider: resolveWebviewView called');
         this.view = webviewView;
 
         webviewView.webview.options = {
@@ -23,7 +26,12 @@ export class ChatProvider implements vscode.WebviewViewProvider {
         };
 
         webviewView.webview.html = this.getWebviewContent(webviewView.webview);
+        console.log('ChatProvider: Webview HTML set successfully');
         this.setupWebviewMessageHandling();
+        console.log('ChatProvider: Message handling setup complete');
+
+        // Show a message to confirm the webview is working
+        vscode.window.showInformationMessage('AI Chat webview loaded successfully!');
     }
 
     private setupWebviewMessageHandling() {
@@ -142,7 +150,17 @@ export class ChatProvider implements vscode.WebviewViewProvider {
         }
     }
 
-    private getWebviewContent(webview: vscode.Webview): string {
+    public forceResolve() {
+        console.log('ChatProvider: Force resolve called');
+        if (this.view) {
+            console.log('ChatProvider: View already exists, refreshing...');
+            this.view.webview.html = this.getWebviewContent(this.view.webview);
+        } else {
+            console.log('ChatProvider: No view exists yet');
+        }
+    }
+
+    public getWebviewContent(webview: vscode.Webview): string {
         const cssUri = webview.asWebviewUri(vscode.Uri.joinPath(
             this.context.extensionUri, 'src', 'webview.css'));
         const jsUri = webview.asWebviewUri(vscode.Uri.joinPath(

@@ -34,18 +34,38 @@ class GenkitService {
         this.initializeGenkit();
     }
     initializeGenkit() {
-        const config = vscode.workspace.getConfiguration('genkitChat');
-        const apiKey = config.get('apiKey');
+        // Try different configuration scopes
+        const workspaceConfig = vscode.workspace.getConfiguration('genkitChat');
+        const globalConfig = vscode.workspace.getConfiguration('genkitChat', null);
+        let apiKey = workspaceConfig.get('apiKey') || globalConfig.get('apiKey');
+        // Temporary hardcoded API key for development (remove in production)
         if (!apiKey) {
-            vscode.window.showErrorMessage('Please configure your Google AI API key in settings.');
+            apiKey = "AIzaSyBExIonqj575sDdPdKTW2kJBB8r10FyZE8";
+            console.log('GenkitService: Using hardcoded API key for development');
+        }
+        // Debug logging
+        console.log('GenkitService: Reading configuration...');
+        console.log('GenkitService: Workspace API Key:', workspaceConfig.get('apiKey') ? 'Found' : 'Not found');
+        console.log('GenkitService: Global API Key:', globalConfig.get('apiKey') ? 'Found' : 'Not found');
+        console.log('GenkitService: Final API Key found:', apiKey ? 'Yes (length: ' + apiKey.length + ')' : 'No');
+        if (!apiKey) {
+            console.warn('Google AI API key not configured. Chat functionality will be limited.');
+            vscode.window.showWarningMessage('Please configure your Google AI API key in settings for full chat functionality.');
             return;
         }
-        // Initialize Genkit with Google AI
-        this.ai = (0, beta_1.genkit)({
-            plugins: [(0, googleai_1.googleAI)({ apiKey })]
-        });
-        this.setupTools();
-        this.createNewSession();
+        try {
+            // Initialize Genkit with Google AI
+            this.ai = (0, beta_1.genkit)({
+                plugins: [(0, googleai_1.googleAI)({ apiKey })]
+            });
+            this.setupTools();
+            this.createNewSession();
+            console.log('Genkit service initialized successfully');
+        }
+        catch (error) {
+            console.error('Failed to initialize Genkit:', error);
+            vscode.window.showErrorMessage(`Failed to initialize AI service: ${error}`);
+        }
     }
     setupTools() {
         // File operations tool

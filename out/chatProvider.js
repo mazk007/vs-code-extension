@@ -30,15 +30,21 @@ class ChatProvider {
         this.context = context;
         this.genkitService = genkitService;
         this.chatHistory = [];
+        console.log('ChatProvider: Constructor called');
     }
     resolveWebviewView(webviewView, context, _token) {
+        console.log('ChatProvider: resolveWebviewView called');
         this.view = webviewView;
         webviewView.webview.options = {
             enableScripts: true,
             localResourceRoots: [this.context.extensionUri]
         };
         webviewView.webview.html = this.getWebviewContent(webviewView.webview);
+        console.log('ChatProvider: Webview HTML set successfully');
         this.setupWebviewMessageHandling();
+        console.log('ChatProvider: Message handling setup complete');
+        // Show a message to confirm the webview is working
+        vscode.window.showInformationMessage('AI Chat webview loaded successfully!');
     }
     setupWebviewMessageHandling() {
         if (!this.view)
@@ -139,6 +145,16 @@ class ChatProvider {
         this.clearHistory();
         if (this.view) {
             this.view.webview.postMessage({ type: 'newSession' });
+        }
+    }
+    forceResolve() {
+        console.log('ChatProvider: Force resolve called');
+        if (this.view) {
+            console.log('ChatProvider: View already exists, refreshing...');
+            this.view.webview.html = this.getWebviewContent(this.view.webview);
+        }
+        else {
+            console.log('ChatProvider: No view exists yet');
         }
     }
     getWebviewContent(webview) {

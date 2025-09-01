@@ -104,13 +104,13 @@ function formatMessage(text) {
 
 function clearMessages() {
     const container = document.getElementById('chatContainer');
-    container.innerHTML = '
+    container.innerHTML = `
         <div class="empty-state">
             <div class="empty-state-icon">💬</div>
             <div class="empty-state-text">Start a conversation</div>
             <div class="empty-state-subtitle">Ask me anything about your code!</div>
         </div>
-    ';
+    `;
     updateSendButton(false);
 }
 
