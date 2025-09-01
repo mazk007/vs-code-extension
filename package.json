@@ -1,0 +1,111 @@
+{
+  "name": "vscode-genkit-chat",
+  "displayName": "AI Chat with Genkit",
+  "description": "Cursor-style chat sidepanel powered by Gemini 2.0 Flash via Genkit",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "genkitChatView",
+          "name": "AI Chat",
+          "when": "true"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "genkitChat.openChat",
+        "title": "Open AI Chat",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "genkitChat.clearHistory",
+        "title": "Clear Chat History",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "genkitChat.newSession",
+        "title": "New Chat Session",
+        "icon": "$(add)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "genkitChat.newSession",
+          "when": "view == genkitChatView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "genkitChat.clearHistory",
+          "when": "view == genkitChatView",
+          "group": "navigation@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "AI Chat",
+      "properties": {
+        "genkitChat.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Google AI API Key for Gemini 2.0 Flash",
+          "markdownDescription": "Your Google AI API key. Get one from [Google AI Studio](https://makersuite.google.com/app/apikey)"
+        },
+        "genkitChat.model": {
+          "type": "string",
+          "default": "gemini-2.0-flash-exp",
+          "description": "The Gemini model to use",
+          "enum": [
+            "gemini-2.0-flash-exp",
+            "gemini-1.5-pro",
+            "gemini-1.5-flash"
+          ]
+        },
+        "genkitChat.temperature": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Controls randomness in responses (0 = deterministic, 2 = very random)"
+        },
+        "genkitChat.maxTokens": {
+          "type": "number",
+          "default": 8192,
+          "minimum": 1,
+          "maximum": 32768,
+          "description": "Maximum number of tokens in the response"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.60.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^4.9.0"
+  },
+  "dependencies": {
+    "genkit": "^1.14.1",
+    "@genkit-ai/googleai": "^1.14.1",
+    "zod": "^3.22.0",
+    "glob": "^8.1.0"
+  }
+}
