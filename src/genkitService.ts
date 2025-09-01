@@ -1,4 +1,4 @@
-import { genkit } from 'genkit';
+import { genkit } from 'genkit/beta';
 import { googleAI } from '@genkit-ai/googleai';
 import { z } from 'zod';
 import * as vscode from 'vscode';
@@ -101,7 +101,7 @@ export class GenkitService {
                         input.exclude || '{**/node_modules/**,**/.git/**}'
                     );
 
-                    const filePaths = files.map(uri =>
+                    const filePaths = files.map((uri: vscode.Uri) =>
                         vscode.workspace.asRelativePath(uri)
                     ).slice(0, 50); // Limit results
 

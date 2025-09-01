@@ -67,12 +67,12 @@ A VS Code extension that provides a Cursor-style chat sidepanel powered by Googl
 
 - **API Key**: Your Google AI API key
   \`\`\`json
-  "genkitChat.apiKey": "your-google-ai-api-key"
+  "genkitChat.apiKey": "AIzaSyBExIonqj575sDdPdKTW2kJBB8r10FyZE8"
   \`\`\`
 
 ### Optional Settings
 
-- **Model**: Choose the Gemini model (default: `gemini-2.0-flash-exp`)
+- **Model**: Choose the Gemini model (default: `gemini-2.0-flash`)
   \`\`\`json
   "genkitChat.model": "gemini-2.0-flash-exp"
   \`\`\`

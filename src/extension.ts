@@ -11,17 +11,13 @@ export function activate(context: vscode.ExtensionContext) {
     // Create chat provider
     const chatProvider = new ChatProvider(context, genkitService);
 
-    // Register the chat view
-    const chatView = vscode.window.createTreeView('genkitChatView', {
-        treeDataProvider: chatProvider,
-        showCollapseAll: false
-    });
+    // Register the chat view provider
+    const chatViewProvider = vscode.window.registerWebviewViewProvider(
+        'genkitChatView',
+        chatProvider
+    );
 
     // Register commands
-    const openChatCommand = vscode.commands.registerCommand('genkitChat.openChat', () => {
-        chatProvider.openChatPanel();
-    });
-
     const clearHistoryCommand = vscode.commands.registerCommand('genkitChat.clearHistory', () => {
         chatProvider.clearHistory();
     });
@@ -32,14 +28,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Add to subscriptions
     context.subscriptions.push(
-        chatView,
-        openChatCommand,
+        chatViewProvider,
         clearHistoryCommand,
         newSessionCommand
     );
-
-    // Open chat panel on activation
-    chatProvider.openChatPanel();
 }
 
 export function deactivate() {

@@ -16,12 +16,20 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "genkit-chat-sidebar",
+          "title": "AI Chat",
+          "icon": "images/icon.svg"
+        }
+      ]
+    },
     "views": {
-      "explorer": [
+      "genkit-chat-sidebar": [
         {
           "id": "genkitChatView",
-          "name": "AI Chat",
-          "when": "true"
+          "name": "AI Chat"
         }
       ]
     },
@@ -98,14 +106,15 @@
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/vscode": "^1.60.0",
+    "@types/glob": "^8.1.0",
     "@types/node": "^18.0.0",
+    "@types/vscode": "^1.60.0",
     "typescript": "^4.9.0"
   },
   "dependencies": {
-    "genkit": "^1.14.1",
     "@genkit-ai/googleai": "^1.14.1",
-    "zod": "^3.22.0",
-    "glob": "^8.1.0"
+    "genkit": "^1.14.1",
+    "glob": "^8.1.0",
+    "zod": "^3.22.0"
   }
 }
